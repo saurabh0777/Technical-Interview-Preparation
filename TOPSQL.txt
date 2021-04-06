@@ -1,0 +1,130 @@
+--Number of rows in a table without using COUNT function...
+--Find the LAST inserted record in a table...
+--Third highest salary
+
+
+select salary from 
+(
+select salary from emp
+order by salary desc limit 3) t
+order by salary asc limit 1
+
+-- Display first and last rows
+
+select * from  (select rownum as r , ename from emp )
+where r =1 or r = (select count(*) from emp)
+
+-- Display last 2 records
+
+select * from emp
+where rownum <=(select count(*)-2 from emp)
+
+-- SQL query to fetch the names of workers who earn the highest salary
+
+select name,id,salary from emp where salary = (select max(salary from emp)
+
+Difference between join and union:
+
+Join combine the data from multiple tables based on key column
+while union is used to combine the result sets, Number of columns selected from each table should be same.It returns distinct rows.
+
+--fetch the list of employees with the same salary.
+
+select e1.empid,e1.name,e1.salary 
+from emp e1, emp e2
+where e1.salary = e2.salary
+and e1.empid != e2.empid
+
+--show records from one table that another table does not have.
+SELECT * FROM Worker
+MINUS
+SELECT * FROM Title;
+
+-- Find employee id with odd number
+
+SELECT eid FROM Employee WHERE eid % 2 = 1; 
+
+--Find all the employee whose salary is more than the average salary of all employees.
+
+select * from employee 
+where salary > (select avg(salary) from employee)
+
+-- print the employee name and manager name
+--EmpId   EmpName     ManagerId
+1       Monib       4
+
+2       zahir       1
+
+3       Sarfudding  NULL
+
+4       Aslam       3
+
+
+select e.EmpId as EmployeeId,e.EmpName as EmployeeName,e.ManagerId as ManagerId,e1.EmpName as Managername from Manager e
+  join manager e1 on e.ManagerId=e1.empId
+  
+  
+-- distinct record without using the distinct
+       select eid,ename
+       from emp
+       group by eid,ename
+	   
+-- delete duplicate records when more colums are there:
+
+SELECT [FirstName], 
+    [LastName], 
+    [Country], 
+    COUNT(*) AS CNT
+FROM [SampleDB].[dbo].[Employee]
+GROUP BY [FirstName], 
+      [LastName], 
+      [Country]
+HAVING COUNT(*) > 1;
+
+
+
+-- find the root node ,leaf node and inner node:
+
+N,p
+1,2
+3,2
+6,8
+9,8
+2,5
+8,5
+5,null
+
+
+
+Write an SQL query to reformat the table so that there is a revenue column for each month.
+
+Initial table:
++------+---------+-------+
+| id | revenue | month |
++------+---------+-------+
+| 1 | 8000 | Jan |
+| 2 | 9000 | Jan |
+| 3 | 10000 | Feb |
+| 1 | 7000 | Feb |
+| 1 | 6000 | Mar |
++------+---------+-------+
+
+Result table:
++------+-------------+-------------+-------------+-----+-----------+
+| id | Jan_Revenue | Feb_Revenue | Mar_Revenue | ... | Dec_Revenue |
++------+-------------+-------------+-------------+-----+-----------+
+| 1 | 8000 | 7000 | 6000 | ... | null |
+| 2 | 9000 | null | null | ... | null |
+| 3 | null | 10000 | null | ... | null |
++------+-------------+-------------+-------------+-----+-----------+
+
+select id,
+(case when month = Jan then revenue end) As Jan_Revenue,
+(case when month = Feb then revenue end) As Feb_Revenue,
+(case when month = Mar then revenue end) as Mar_Revenue,
+from revenue
+group by id
+order by id
+
+
+
